@@ -5,30 +5,30 @@ import { types } from "../types/types"
 import { startLoading, finishLoading } from '../actions/ui'
 
 export const startLoginEmailPassword = (email, password) =>{
+    // Accion asincronica firebase.auth().signInWithEmailAndPassword( email, password)
 return(dispatch) => { // El dispatch lo ofrece thunk, le manda la acciones a todos los reducers, como estas son unicas
                       // solo lo recibe el reducer correcto.
-    
-    dispatch ( startLoading ()); // Inicia el loading
+                          
+        dispatch ( startLoading ()); // Inicia el loading
 
-    firebase.auth().signInWithEmailAndPassword( email, password)
-    .then (  ({user}) => {          
-        dispatch( login (user.uid, user.displayName))
-        
-        dispatch ( finishLoading ()); //Cancela el loading
+        firebase.auth().signInWithEmailAndPassword( email, password)
+        .then (  ({user}) => {          
+             //Accion sincronica login
+            dispatch( login (user.uid, user.displayName))
+            
+            dispatch ( finishLoading ()); //Cancela el loading
 
-    })
-    .catch ( e => { // Por si el usuario no existe o el pass es incorrecto.
-        console.log(e);        
-        dispatch ( finishLoading () ); //Cancela el loading
-        Swal.fire('Error', e.message, 'error');
-    })
-
-
+        })
+        .catch ( e => { // Por si el usuario no existe o el pass es incorrecto.
+            console.log(e);        
+            dispatch ( finishLoading () ); //Cancela el loading
+            Swal.fire('Error', e.message, 'error');
+        })
     }
-
 }
 
 export const startRegisterWithEmailPasswordName = ( email, password, name) => {
+    // Accion asincronica firebase.auth().createUserWithEmailAndPassword
     return ( dispatch )=> { //el dispacht es provisto por el middleware thunk cuando la tarea termina
         firebase.auth().createUserWithEmailAndPassword( email, password)
         .then ( async ({user}) => {
@@ -36,6 +36,8 @@ export const startRegisterWithEmailPasswordName = ( email, password, name) => {
 
             await user.updateProfile ( { displayName: name }) // Esto es un promesa, se puede poner en otro .then
                                                             // se opto por usar async             
+           
+            //Accion sincronica login                                                
             dispatch(
                 login (user.uid, user.displayName)
             )
@@ -50,10 +52,12 @@ export const startRegisterWithEmailPasswordName = ( email, password, name) => {
 }
 
 export const startGoogleLogin = () => {
+     // Accion asincronica  firebase.auth().signInWithPopup
     return ( dispatch ) => {
         firebase.auth().signInWithPopup( googleAuthProvider)
         .then ( ({user}) => {
             dispatch(
+                //Accion sincronica login
                 login (user.uid, user.displayName)
             )
         });

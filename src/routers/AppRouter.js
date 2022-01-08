@@ -20,7 +20,7 @@ export const AppRouter = () => {
 
   const dispatch = useDispatch();
   const [ checking, setchecking ] = useState( true );      // Esta chequeando el estado de firbase
-  const [isLoggedIn, setisLoggedIn ] = useState( false ); // El usuario esta logeado?
+  const [isLoggedIn, setIsLoggedIn ] = useState( false ); // El usuario esta logeado?
 
 // Esta observando si la auth cambia y la actualiza
     useEffect(() => {
@@ -36,17 +36,17 @@ export const AppRouter = () => {
 
                 dispatch (login( user.uid, user.displayName));
                 //console.log('observando user');
-                setisLoggedIn( true ); 
+                setIsLoggedIn( true ); 
 
             }else {
-                setisLoggedIn( false );
+                setIsLoggedIn( false );
             }
 
             setchecking( false ); // Termino de checkear firebase.
         });
     // Como el useDispacth puede cambiar el useEffect tira un warning ,para evita los ponemos como dependencia
 
-    }, [ dispatch, setchecking, setisLoggedIn ]) // Todo lo que cambie dentro del useEffect es una dependencia.
+    }, [ dispatch, setchecking, setIsLoggedIn ]) // Todo lo que cambie dentro del useEffect es una dependencia.
 
     
     /*
